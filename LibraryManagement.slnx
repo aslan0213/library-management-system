@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="Abstractions/Abstractions.csproj" />
+  <Project Path="Domain/Domain.csproj" />
+  <Project Path="IntegrationTests/IntegrationTests.csproj" />
+  <Project Path="LibraryManagement/LibraryManagement.csproj" />
+  <Project Path="LoggingService/LoggingService.csproj" />
+  <Project Path="Persistence/Persistence.csproj" />
+  <Project Path="Services/Services.csproj" />
+  <Project Path="Shared/Shared.csproj" />
+  <Project Path="UnitTests/UnitTests.csproj" />
+</Solution>
