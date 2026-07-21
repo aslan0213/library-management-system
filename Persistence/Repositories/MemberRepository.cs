@@ -22,6 +22,5 @@ namespace Persistence.Repositories
 				_ => source.OrderBy(m => m.LastName)
 			};
 		}
-	{
 	}
 }
