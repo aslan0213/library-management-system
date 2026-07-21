@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Domain.Entities
 {
-	public class Loan
+	public class Loan : IHasId
 	{
 		public Guid Id { get; set; }
 		public Guid BookId { get; set; }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Domain.Entities
 {
-	public class Member
+	public class Member : IHasId
 	{
 		public Guid Id { get; set; }
 		public string FirstName { get; set; } = string.Empty;
