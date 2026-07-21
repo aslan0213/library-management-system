@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Shared.Dtos.Paging
+namespace Shared.Paging
 {
 	public class PagedResult<T>
 	{
