@@ -8,7 +8,7 @@ namespace Shared.Dtos.Loan
 	{
 		public Guid BookId { get; set; }
 		public Guid MemberId { get; set; }
-		public DateTime DueDate { get; set; }
+		public DateTime DueAt { get; set; }
 
 	}
 }
