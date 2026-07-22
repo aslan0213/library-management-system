@@ -10,7 +10,7 @@ namespace Abstractions.Services
 		Task<Book?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 		Task<PagedResult<Book>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default);
 		Task<Book> CreateAsync(Book book, CancellationToken cancellationToken = default);
-		Task<Book> UpdateAsync(Book book, CancellationToken cancellationToken = default);
-		Task<Book> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+		Task UpdateAsync(Book book, CancellationToken cancellationToken = default);
+		Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 	}
 }
