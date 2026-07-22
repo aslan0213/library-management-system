@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Abstractions.Paging;
@@ -11,9 +11,9 @@ namespace Services
 	public class BookService : IBookService
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public BookService(IUnitOfWork _unitOfWork)
+		public BookService(IUnitOfWork unitOfWork)
 		{
-			_unitOfWork = _unitOfWork;
+			_unitOfWork = unitOfWork;
 		}
 		public async Task<Book> CreateAsync(Book book, CancellationToken cancellationToken = default)
 		{

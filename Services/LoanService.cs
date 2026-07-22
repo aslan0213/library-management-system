@@ -1,4 +1,4 @@
-﻿using Abstractions.Paging;
+using Abstractions.Paging;
 using Abstractions.Services;
 using Abstractions.Repositories;
 using Domain.Entities;
@@ -12,9 +12,9 @@ namespace Services
 	public class LoanService : ILoanService
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public LoanService(IUnitOfWork _unitOfWork)
+		public LoanService(IUnitOfWork unitOfWork)
 		{
-			_unitOfWork = _unitOfWork;
+			_unitOfWork = unitOfWork;
 		}
 		public async Task<Loan> CreateLoanAsync(Guid bookId, Guid memberId, DateTime dueAt, CancellationToken cancellationToken = default)
 		{
