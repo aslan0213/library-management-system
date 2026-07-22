@@ -1,4 +1,4 @@
-﻿using Abstractions.Services;gi
+﻿using Abstractions.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Applications;
