@@ -10,7 +10,7 @@ namespace Services.Mapping
 	{
 		public AuthorProfile()
 		{
-			CreateMap<Author, AuthorResponce>();
+			CreateMap<Author, AuthorResponse>();
 			CreateMap<CreateAuthorRequest, Author>();
 			CreateMap<UpdateAuthorRequest, Author>();
 		}

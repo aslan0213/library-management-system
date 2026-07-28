@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shared.Dtos.Author
 {
-	public class AuthorResponce
+	public class AuthorResponse
 	{
 		public Guid Id { get; set; }
 		public string FirstName { get; set; } = string.Empty;

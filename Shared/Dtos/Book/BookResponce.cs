@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shared.Dtos.Book
 {
-	public class BookResponce
+	public class BookResponse
 	{
 		public Guid Id { get; set; }
 		public string Title { get; set; } = string.Empty;
@@ -14,7 +14,7 @@ namespace Shared.Dtos.Book
 		public string Publisher { get; set; } = string.Empty;
 		public int TotalCopies { get; set; }
 		public int AvailableCopies { get; set; }
-		public AuthorResponce Author { get; set; } = null!;
+		public AuthorResponse Author { get; set; } = null!;
 
 
 	}

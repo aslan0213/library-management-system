@@ -30,26 +30,26 @@ namespace Services.Applications
 			_updateValidator = updateValidator;
 		}
 
-		public async Task<BookResponce?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+		public async Task<BookResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
 		{
 			var book = await _bookService.GetByIdAsync(id, cancellationToken);
-			return book is null ? null : _mapper.Map<BookResponce>(book);
+			return book is null ? null : _mapper.Map<BookResponse>(book);
 		}
 
-		public async Task<Shared.Paging.PagedResult<BookResponce>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default)
+		public async Task<Shared.Paging.PagedResult<BookResponse>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default)
 		{
 			var query = _mapper.Map<PagedQuery>(request);
 			var result = await _bookService.GetPagedAsync(query, cancellationToken);
-			return _mapper.Map<Shared.Paging.PagedResult<BookResponce>>(result);
+			return _mapper.Map<Shared.Paging.PagedResult<BookResponse>>(result);
 		}
 
-		public async Task<BookResponce> CreateAsync(CreateBookRequest request, CancellationToken cancellationToken = default)
+		public async Task<BookResponse> CreateAsync(CreateBookRequest request, CancellationToken cancellationToken = default)
 		{
 			await _createValidator.ValidateAndThrowAsync(request, cancellationToken);
 
 			var book = _mapper.Map<Book>(request);
 			var created = await _bookService.CreateAsync(book, cancellationToken);
-			return _mapper.Map<BookResponce>(created);
+			return _mapper.Map<BookResponse>(created);
 		}
 
 		public async Task UpdateAsync(Guid id, UpdateBookRequest request, CancellationToken cancellationToken = default)

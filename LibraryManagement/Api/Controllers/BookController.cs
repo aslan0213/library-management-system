@@ -22,7 +22,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a paged, sortable list of books.
 		/// </summary>
 		[HttpGet]
-		public async Task<ActionResult<PagedResult<BookResponce>>> GetPaged(
+		public async Task<ActionResult<PagedResult<BookResponse>>> GetPaged(
 			[FromQuery] PagedRequest request,
 			CancellationToken cancellationToken)
 		{
@@ -34,7 +34,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a single book by Id.
 		/// </summary>
 		[HttpGet("{id:guid}")]
-		public async Task<ActionResult<BookResponce>> GetById(Guid id, CancellationToken cancellationToken)
+		public async Task<ActionResult<BookResponse>> GetById(Guid id, CancellationToken cancellationToken)
 		{
 			var book = await _bookAppService.GetByIdAsync(id, cancellationToken);
 			return book is null ? NotFound() : Ok(book);
@@ -44,7 +44,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Adds a new book to the catalog.
 		/// </summary>
 		[HttpPost]
-		public async Task<ActionResult<BookResponce>> Create(
+		public async Task<ActionResult<BookResponse>> Create(
 			[FromBody] CreateBookRequest request,
 			CancellationToken cancellationToken)
 		{

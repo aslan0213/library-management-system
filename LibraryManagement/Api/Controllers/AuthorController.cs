@@ -21,7 +21,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a paged, sortable list of authors.
 		/// </summary>
 		[HttpGet]
-		public async Task<ActionResult<PagedResult<AuthorResponce>>> GetPaged([FromQuery] PagedRequest request, CancellationToken cancellationToken)
+		public async Task<ActionResult<PagedResult<AuthorResponse>>> GetPaged([FromQuery] PagedRequest request, CancellationToken cancellationToken)
 		{
 			var authors = await _authorAppService.GetPagedAsync(request, cancellationToken);
 			return Ok(authors);
@@ -30,7 +30,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a single author by ID.
 		/// </summary>	
 		[HttpGet("{id:guid}")]
-		public async Task<ActionResult<AuthorResponce>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
+		public async Task<ActionResult<AuthorResponse>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
 		{
 			var author = await _authorAppService.GetByIdAsync(id, cancellationToken);
 			if (author == null)
@@ -43,7 +43,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Creates a new author.
 		/// </summary>
 		[HttpPost]
-		public async Task<ActionResult<AuthorResponce>> Create([FromBody] CreateAuthorRequest request, CancellationToken cancellationToken)
+		public async Task<ActionResult<AuthorResponse>> Create([FromBody] CreateAuthorRequest request, CancellationToken cancellationToken)
 		{
 			var author = await _authorAppService.CreateAsync(request, cancellationToken);
 			return CreatedAtAction(nameof(GetById), new { id = author.Id }, author);

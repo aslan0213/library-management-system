@@ -23,7 +23,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a paged, sortable list of loans.
 		/// </summary>
 		[HttpGet]
-		public async Task<ActionResult<PagedResult<LoanResponce>>> GetPaged(
+		public async Task<ActionResult<PagedResult<LoanResponse>>> GetPaged(
 			[FromQuery] PagedRequest request,
 			CancellationToken cancellationToken)
 		{
@@ -35,7 +35,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a single loan by Id.
 		/// </summary>
 		[HttpGet("{id:guid}")]
-		public async Task<ActionResult<LoanResponce>> GetById(Guid id, CancellationToken cancellationToken)
+		public async Task<ActionResult<LoanResponse>> GetById(Guid id, CancellationToken cancellationToken)
 		{
 			var loan = await _loanAppService.GetByIdAsync(id, cancellationToken);
 			return loan is null ? NotFound() : Ok(loan);
@@ -45,7 +45,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Creates a new loan, borrowing a book on behalf of a member.
 		/// </summary>
 		[HttpPost]
-		public async Task<ActionResult<LoanResponce>> Create(
+		public async Task<ActionResult<LoanResponse>> Create(
 			[FromBody] CreateLoanRequest request,
 			CancellationToken cancellationToken)
 		{
@@ -57,7 +57,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Marks a loan as returned.
 		/// </summary>
 		[HttpPost("{id:guid}/return")]
-		public async Task<ActionResult<LoanResponce>> Return(Guid id, CancellationToken cancellationToken)
+		public async Task<ActionResult<LoanResponse>> Return(Guid id, CancellationToken cancellationToken)
 		{
 			await _loanAppService.ReturnLoanAsync(id, cancellationToken);
 			var updated = await _loanAppService.GetByIdAsync(id, cancellationToken);

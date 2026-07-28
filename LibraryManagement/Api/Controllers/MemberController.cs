@@ -23,7 +23,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a paged, sortable list of members.
 		/// </summary>
 		[HttpGet]
-		public async Task<ActionResult<PagedResult<MemberResponce>>> GetPaged(
+		public async Task<ActionResult<PagedResult<MemberResponse>>> GetPaged(
 			[FromQuery] PagedRequest request,
 			CancellationToken cancellationToken)
 		{
@@ -35,7 +35,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a single member by Id.
 		/// </summary>
 		[HttpGet("{id:guid}")]
-		public async Task<ActionResult<MemberResponce>> GetById(Guid id, CancellationToken cancellationToken)
+		public async Task<ActionResult<MemberResponse>> GetById(Guid id, CancellationToken cancellationToken)
 		{
 			var member = await _memberAppService.GetByIdAsync(id, cancellationToken);
 			return member is null ? NotFound() : Ok(member);
@@ -45,7 +45,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Registers a new member.
 		/// </summary>
 		[HttpPost]
-		public async Task<ActionResult<MemberResponce>> Create(
+		public async Task<ActionResult<MemberResponse>> Create(
 			[FromBody] CreateMemberRequest request,
 			CancellationToken cancellationToken)
 		{

@@ -6,11 +6,11 @@ using System.Text;
 
 namespace Shared.Dtos.Loan
 {
-	public class LoanResponce
+	public class LoanResponse
 	{
 		public Guid Id { get; set; }
-		public BookResponce Book { get; set; } = null!;
-		public MemberResponce Member { get; set; } = null!;
+		public BookResponse Book { get; set; } = null!;
+		public MemberResponse Member { get; set; } = null!;
 		public DateTime BorrowedDate { get; set; }
 		public DateTime DueAt { get; set; }
 		public DateTime? ReturnedDate { get; set; }

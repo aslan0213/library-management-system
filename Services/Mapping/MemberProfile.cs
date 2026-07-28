@@ -10,7 +10,7 @@ namespace Services.Mapping
 	{
 		public MemberProfile() 
 		{ 
-			CreateMap<Member, MemberResponce>();
+			CreateMap<Member, MemberResponse>();
 			CreateMap<CreateMemberRequest, Member>();
 			CreateMap<UpdateMemberRequest, Member>();
 		}

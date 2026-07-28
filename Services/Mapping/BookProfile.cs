@@ -10,7 +10,7 @@ namespace Services.Mapping
 	{
 		public BookProfile()
 		{
-			CreateMap<Book, BookResponce>();
+			CreateMap<Book, BookResponse>();
 			CreateMap<CreateBookRequest, Book>();
 			CreateMap<UpdateBookRequest, Book>();
 		}

@@ -10,7 +10,7 @@ namespace Services.Mapping
 	{
 		public LoanProfile()
 		{
-			CreateMap<Loan, LoanResponce>();
+			CreateMap<Loan, LoanResponse>();
 		}
 	}
 }

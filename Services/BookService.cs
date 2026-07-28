@@ -59,7 +59,7 @@ namespace Services
 			if (book.TotalCopies < copiesOnLoan)
 			{
 				throw new BusinessRuleViolationException(
-					"Cannot set TotalCopies to {book.TotalCopies}; {copiesOnLoan} copies are currently on loan.");
+					$"Cannot set TotalCopies to {book.TotalCopies}; {copiesOnLoan} copies are currently on loan.");
 			}
 			existing.Title = book.Title;
 			existing.Isbn = book.Isbn;

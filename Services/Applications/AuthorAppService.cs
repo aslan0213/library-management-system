@@ -23,12 +23,12 @@ namespace Services.Applications
 			_createValidator = createValidator;
 			_updateValidator = updateValidator;
 		}
-		public async Task<AuthorResponce> CreateAsync(CreateAuthorRequest request, CancellationToken cancellationToken = default)
+		public async Task<AuthorResponse> CreateAsync(CreateAuthorRequest request, CancellationToken cancellationToken = default)
 		{
 			await _createValidator.ValidateAndThrowAsync(request,cancellationToken);
 			var author = _mapper.Map<Domain.Entities.Author>(request);
 			var createdAuthor = await _authorService.CreateAsync(author, cancellationToken);
-			return _mapper.Map<AuthorResponce>(createdAuthor);
+			return _mapper.Map<AuthorResponse>(createdAuthor);
 		}
 
 		public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -36,17 +36,17 @@ namespace Services.Applications
 			await _authorService.DeleteAsync(id, cancellationToken);
 		}
 
-		public async Task<AuthorResponce?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+		public async Task<AuthorResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
 		{
 			var author = await _authorService.GetByIdAsync(id, cancellationToken);
-			return author is null ? null: _mapper.Map<AuthorResponce>(author);
+			return author is null ? null: _mapper.Map<AuthorResponse>(author);
 		}
 
-		public async Task<Shared.Paging.PagedResult<AuthorResponce>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default)
+		public async Task<Shared.Paging.PagedResult<AuthorResponse>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default)
 		{
 			var query = _mapper.Map<PagedQuery>(request);
 			var authors = await _authorService.GetPagedAsync(query, cancellationToken);
-			return _mapper.Map<Shared.Paging.PagedResult<AuthorResponce>>(authors);
+			return _mapper.Map<Shared.Paging.PagedResult<AuthorResponse>>(authors);
 		}
 
 		public async Task UpdateAsync(Guid id, UpdateAuthorRequest request, CancellationToken cancellationToken = default)

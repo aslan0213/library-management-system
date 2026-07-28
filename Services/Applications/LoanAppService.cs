@@ -26,25 +26,25 @@ namespace Services.Applications
 			_createValidator = createValidator;
 		}
 
-		public async Task<LoanResponce?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+		public async Task<LoanResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
 		{
 			var loan = await _loanService.GetByIdAsync(id, cancellationToken);
-			return loan is null ? null : _mapper.Map<LoanResponce>(loan);
+			return loan is null ? null : _mapper.Map<LoanResponse>(loan);
 		}
 
-		public async Task<Shared.Paging.PagedResult<LoanResponce>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default)
+		public async Task<Shared.Paging.PagedResult<LoanResponse>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default)
 		{
 			var query = _mapper.Map<PagedQuery>(request);
 			var result = await _loanService.GetPagedAsync(query, cancellationToken);
-			return _mapper.Map<Shared.Paging.PagedResult<LoanResponce>>(result);
+			return _mapper.Map<Shared.Paging.PagedResult<LoanResponse>>(result);
 		}
 
-		public async Task<LoanResponce> CreateLoanAsync(CreateLoanRequest request, CancellationToken cancellationToken = default)
+		public async Task<LoanResponse> CreateLoanAsync(CreateLoanRequest request, CancellationToken cancellationToken = default)
 		{
 			await _createValidator.ValidateAndThrowAsync(request, cancellationToken);
 
 			var loan = await _loanService.CreateLoanAsync(request.BookId, request.MemberId, request.DueAt, cancellationToken);
-			return _mapper.Map<LoanResponce>(loan);
+			return _mapper.Map<LoanResponse>(loan);
 		}
 
 		public async Task ReturnLoanAsync(Guid loanId, CancellationToken cancellationToken = default) =>

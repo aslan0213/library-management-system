@@ -30,26 +30,26 @@ namespace Services.Applications
 			_updateValidator = updateValidator;
 		}
 
-		public async Task<MemberResponce?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+		public async Task<MemberResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
 		{
 			var member = await _memberService.GetByIdAsync(id, cancellationToken);
-			return member is null ? null : _mapper.Map<MemberResponce>(member);
+			return member is null ? null : _mapper.Map<MemberResponse>(member);
 		}
 
-		public async Task<Shared.Paging.PagedResult<MemberResponce>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default)
+		public async Task<Shared.Paging.PagedResult<MemberResponse>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default)
 		{
 			var query = _mapper.Map<PagedQuery>(request);
 			var result = await _memberService.GetPagedAsync(query, cancellationToken);
-			return _mapper.Map<Shared.Paging.PagedResult<MemberResponce>>(result);
+			return _mapper.Map<Shared.Paging.PagedResult<MemberResponse>>(result);
 		}
 
-		public async Task<MemberResponce> CreateAsync(CreateMemberRequest request, CancellationToken cancellationToken = default)
+		public async Task<MemberResponse> CreateAsync(CreateMemberRequest request, CancellationToken cancellationToken = default)
 		{
 			await _createValidator.ValidateAndThrowAsync(request, cancellationToken);
 
 			var member = _mapper.Map<Member>(request);
 			var created = await _memberService.CreateAsync(member, cancellationToken);
-			return _mapper.Map<MemberResponce>(created);
+			return _mapper.Map<MemberResponse>(created);
 		}
 
 		public async Task UpdateAsync(Guid id, UpdateMemberRequest request, CancellationToken cancellationToken = default)
