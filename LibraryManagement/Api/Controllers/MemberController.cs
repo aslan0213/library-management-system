@@ -23,6 +23,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a paged, sortable list of members.
 		/// </summary>
 		[HttpGet]
+		[ProducesResponseType(typeof(PagedResult<MemberResponse>), StatusCodes.Status200OK)]
 		public async Task<ActionResult<PagedResult<MemberResponse>>> GetPaged(
 			[FromQuery] PagedRequest request,
 			CancellationToken cancellationToken)
@@ -35,6 +36,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a single member by Id.
 		/// </summary>
 		[HttpGet("{id:guid}")]
+		[ProducesResponseType(typeof(MemberResponse), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<MemberResponse>> GetById(Guid id, CancellationToken cancellationToken)
 		{
 			var member = await _memberAppService.GetByIdAsync(id, cancellationToken);
@@ -45,6 +48,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Registers a new member.
 		/// </summary>
 		[HttpPost]
+		[ProducesResponseType(typeof(MemberResponse), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<MemberResponse>> Create(
 			[FromBody] CreateMemberRequest request,
 			CancellationToken cancellationToken)
@@ -57,6 +62,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Updates an existing member.
 		/// </summary>
 		[HttpPut("{id:guid}")]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> Update(
 			Guid id,
 			[FromBody] UpdateMemberRequest request,
@@ -70,6 +78,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Deletes a member.
 		/// </summary>
 		[HttpDelete("{id:guid}")]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]	
 		public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
 		{
 			await _memberAppService.DeleteAsync(id, cancellationToken);

@@ -21,6 +21,7 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a paged, sortable list of authors.
 		/// </summary>
 		[HttpGet]
+		[ProducesResponseType(typeof(PagedResult<AuthorResponse>),StatusCodes.Status200OK)]
 		public async Task<ActionResult<PagedResult<AuthorResponse>>> GetPaged([FromQuery] PagedRequest request, CancellationToken cancellationToken)
 		{
 			var authors = await _authorAppService.GetPagedAsync(request, cancellationToken);
@@ -30,6 +31,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a single author by ID.
 		/// </summary>	
 		[HttpGet("{id:guid}")]
+		[ProducesResponseType(typeof(AuthorResponse), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<AuthorResponse>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
 		{
 			var author = await _authorAppService.GetByIdAsync(id, cancellationToken);
@@ -43,6 +46,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Creates a new author.
 		/// </summary>
 		[HttpPost]
+		[ProducesResponseType(typeof(AuthorResponse), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<AuthorResponse>> Create([FromBody] CreateAuthorRequest request, CancellationToken cancellationToken)
 		{
 			var author = await _authorAppService.CreateAsync(request, cancellationToken);
@@ -52,6 +57,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Updates an existing author.
 		/// </summary>
 		[HttpPut("{id:guid}")]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult> Update(Guid id, [FromBody] UpdateAuthorRequest request, CancellationToken cancellationToken)
 		{
 			await _authorAppService.UpdateAsync(id, request, cancellationToken);
@@ -62,6 +70,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Deletes an author.
 		/// </summary>
 		[HttpDelete("{id:guid}")]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
 		{
 			await _authorAppService.DeleteAsync(id, cancellationToken);
