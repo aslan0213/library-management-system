@@ -1,7 +1,9 @@
 ﻿using Abstractions.Services;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Applications;
+using Services.Auth;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +11,7 @@ namespace Services
 {
 	public static class DependencyInjection
 	{
-		public static IServiceCollection AddServices(this IServiceCollection services)
+		public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
 		{
 			//mapping
 			services.AddAutoMapper(cfg => { }, typeof(DependencyInjection).Assembly);
@@ -25,7 +27,11 @@ namespace Services
 			services.AddScoped<IMemberAppService, MemberAppService>();
 			services.AddScoped<IBookAppService, BookAppService>();
 			services.AddScoped<ILoanAppService, LoanAppService>();
-
+			//Authentication
+			services.AddScoped<IAuthService, AuthService>();
+			services.AddScoped<IJwtTokenGenerator, JwtGenerator>();
+			services.AddScoped<IPasswordHasher, PasswordHasher>();
+			services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 			return services;
 		}	
 	}
