@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Applications;
 using Shared.Dtos.Author;
 using Shared.Paging;
@@ -21,6 +22,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a paged, sortable list of authors.
 		/// </summary>
 		[HttpGet]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(typeof(PagedResult<AuthorResponse>),StatusCodes.Status200OK)]
 		public async Task<ActionResult<PagedResult<AuthorResponse>>> GetPaged([FromQuery] PagedRequest request, CancellationToken cancellationToken)
 		{
@@ -31,6 +34,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a single author by ID.
 		/// </summary>	
 		[HttpGet("{id:guid}")]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(typeof(AuthorResponse), StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<AuthorResponse>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
@@ -46,6 +51,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Creates a new author.
 		/// </summary>
 		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(typeof(AuthorResponse), StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<AuthorResponse>> Create([FromBody] CreateAuthorRequest request, CancellationToken cancellationToken)
@@ -57,6 +65,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Updates an existing author.
 		/// </summary>
 		[HttpPut("{id:guid}")]
+		[Authorize(Roles = "Admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -70,6 +81,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Deletes an author.
 		/// </summary>
 		[HttpDelete("{id:guid}")]
+		[Authorize(Roles = "Admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
