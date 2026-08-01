@@ -22,6 +22,7 @@ namespace Services.Auth
 			{
 				new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
 				new Claim(JwtRegisteredClaimNames.Email, user.Email),
+				new Claim(ClaimTypes.Role, user.role.ToString()),
 				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 			};
 			var key = new SymmetricSecurityKey(Convert.FromBase64String(_jwtSettings.Secret));
