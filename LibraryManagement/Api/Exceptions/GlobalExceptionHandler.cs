@@ -48,6 +48,24 @@ namespace LibraryManagement.Api.Exceptions
 					businessRule.Message,
 					null),
 
+				InvalidCredentialException invalidCredentials => (
+					StatusCodes.Status401Unauthorized,
+					"Authentication failed",
+					invalidCredentials.Message,
+					null),
+
+				InvalidRefreshTokenException ınvalidRefreshToken => (
+					StatusCodes.Status401Unauthorized,
+					"Authentication failed",
+					ınvalidRefreshToken.Message,
+					null),
+
+				EmailAlreadyRegisteredException emailTaken => (
+					StatusCodes.Status409Conflict,
+					"Registration failed",
+					emailTaken.Message,
+					null),
+
 				ValidationException validation => (
 					StatusCodes.Status400BadRequest,
 					"Validation failed",

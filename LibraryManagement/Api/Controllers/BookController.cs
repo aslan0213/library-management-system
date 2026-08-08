@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Applications;
 using Shared.Dtos.Book;
 using Shared.Paging;
@@ -22,6 +23,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a paged, sortable list of books.
 		/// </summary>
 		[HttpGet]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(typeof(PagedResult<BookResponse>), StatusCodes.Status200OK)]
 		public async Task<ActionResult<PagedResult<BookResponse>>> GetPaged(
 			[FromQuery] PagedRequest request,
@@ -35,6 +38,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a single book by Id.
 		/// </summary>
 		[HttpGet("{id:guid}")]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<BookResponse>> GetById(Guid id, CancellationToken cancellationToken)
@@ -47,6 +52,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Adds a new book to the catalog.
 		/// </summary>
 		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(typeof(BookResponse), StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -62,6 +70,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Updates an existing book.
 		/// </summary>
 		[HttpPut("{id:guid}")]
+		[Authorize(Roles = "Admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -79,6 +90,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Removes a book from the catalog.
 		/// </summary>
 		[HttpDelete("{id:guid}")]
+		[Authorize(Roles = "Admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status409Conflict)]

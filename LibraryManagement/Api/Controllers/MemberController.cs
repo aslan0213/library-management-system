@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Applications;
 using Shared.Dtos.Member;
 using Shared.Paging;
@@ -10,7 +11,7 @@ namespace LibraryManagement.Api.Controllers
 	/// </summary>
 	[ApiController]
 	[Route("api/[controller]")]
-	public class MemberController: ControllerBase
+	public class MemberController : ControllerBase
 	{
 		private readonly IMemberAppService _memberAppService;
 
@@ -23,6 +24,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a paged, sortable list of members.
 		/// </summary>
 		[HttpGet]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(typeof(PagedResult<MemberResponse>), StatusCodes.Status200OK)]
 		public async Task<ActionResult<PagedResult<MemberResponse>>> GetPaged(
 			[FromQuery] PagedRequest request,
@@ -36,6 +39,8 @@ namespace LibraryManagement.Api.Controllers
 		/// Gets a single member by Id.
 		/// </summary>
 		[HttpGet("{id:guid}")]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(typeof(MemberResponse), StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<MemberResponse>> GetById(Guid id, CancellationToken cancellationToken)
@@ -48,6 +53,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Registers a new member.
 		/// </summary>
 		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(typeof(MemberResponse), StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<MemberResponse>> Create(
@@ -62,6 +70,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Updates an existing member.
 		/// </summary>
 		[HttpPut("{id:guid}")]
+		[Authorize(Roles = "Admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -78,6 +89,9 @@ namespace LibraryManagement.Api.Controllers
 		/// Deletes a member.
 		/// </summary>
 		[HttpDelete("{id:guid}")]
+		[Authorize(Roles = "Admin")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]	
 		public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)

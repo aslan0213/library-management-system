@@ -10,6 +10,8 @@ namespace Abstractions.Repositories
 		IBookRepository Books { get; }
 		ILoanRepository Loans { get; }
 		IMemberRepository Members { get; }
+		IUserRepository Users { get; }
+		IRefreshTokenRepository RefreshTokens { get; }
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
 }

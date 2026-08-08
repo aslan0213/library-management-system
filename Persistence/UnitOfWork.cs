@@ -14,6 +14,8 @@ namespace Persistence
 		private IBookRepository? _books;
 		private ILoanRepository? _loans;
 		private IMemberRepository? _members;
+		private IUserRepository? _users;
+		private IRefreshTokenRepository? _refreshTokens;
 
 		public UnitOfWork(LibraryDbContext context)
 		{
@@ -24,6 +26,9 @@ namespace Persistence
 		public IBookRepository Books => _books??= new BookRepository(_context);
 		public ILoanRepository Loans => _loans??= new LoanRepository(_context);
 		public IMemberRepository Members => _members??= new MemberRepository(_context);
+		public IUserRepository Users =>_users ??= new UserRepository(_context);
+		public IRefreshTokenRepository RefreshTokens =>_refreshTokens ??= new RefreshTokenRepository(_context);
+
 		public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			return await _context.SaveChangesAsync(cancellationToken);
