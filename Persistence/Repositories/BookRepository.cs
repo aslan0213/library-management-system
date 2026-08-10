@@ -6,6 +6,7 @@ using Abstractions.Repositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Repositories;
+using Domain.Entities;
 namespace Persistence.Repositories
 {
 	public class BookRepository : RepositoryBase<Book>,IBookRepository
@@ -16,7 +17,7 @@ namespace Persistence.Repositories
 		}
 		protected override IQueryable<Book> IncludeRelated(IQueryable<Book> source)
 		{
-			return source.Include(b=> b.Author);
+			return source.Include(b=> b.Author).Include(b => b.Categories).Include(b => b.Publisher);
 		}
 		protected override IQueryable<Book> ApplySort(IQueryable<Book> source, PagedQuery query)
 		{
