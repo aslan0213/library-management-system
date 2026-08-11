@@ -4,9 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Applications;
 using Services.Auth;
+using Services.BackgroundJobs;
+using Services.Reservations;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Hosting;
 namespace Services
 {
 	public static class DependencyInjection
@@ -22,6 +25,9 @@ namespace Services
 			services.AddScoped<IBookService, BookService>();
 			services.AddScoped<IMemberService, MemberService>();
 			services.AddScoped<ILoanService, LoanService>();
+			services.AddScoped<IReservationService, ReservationService>();
+			services.AddScoped<IReservationExpirationService, ReservationExpirationService>();
+			services.AddHostedService<ReservationExpirationBackgroundService>();
 			//appservices
 			services.AddScoped<IAuthorAppService, AuthorAppService>();
 			services.AddScoped<IMemberAppService, MemberAppService>();

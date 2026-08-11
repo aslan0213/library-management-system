@@ -16,5 +16,30 @@ namespace Persistence.Repositories
 		{
 			return source.Include(r => r.Book).Include(r => r.Member);
 		}
+
+		public async Task<List<Reservation>> GetExpiredFulfilledAsync(DateTime asOf, CancellationToken cancellationToken = default)
+		{
+			return await FindAll(trackChanges: true)
+				.Where(r => r.Status == ReservationStatus.Fullfilled && r.HeldUntil!=null && r.HeldUntil.Value < asOf)
+				.ToListAsync(cancellationToken);
+		}
+
+		public async Task<Reservation?> GetFulfilledForMemberAndBookAsync(Guid memberId, Guid bookId, CancellationToken cancellationToken = default)
+		{
+			return await FindAll(trackChanges: true)
+				.FirstOrDefaultAsync(r =>
+				r.MemberId == memberId &&
+				r.BookId == bookId &&
+				r.Status == ReservationStatus.Fullfilled,
+				cancellationToken);
+		}
+
+		public async Task<Reservation?> GetOldestPendingForBookAsync(Guid bookId, CancellationToken cancellationToken = default)
+		{
+			return await FindAll(trackChanges: true)
+				.Where(r => r.Status == ReservationStatus.Pending && r.BookId == bookId)
+				.OrderBy(r => r.ReservedAt)
+				.FirstOrDefaultAsync(cancellationToken);
+		}
 	}
 }

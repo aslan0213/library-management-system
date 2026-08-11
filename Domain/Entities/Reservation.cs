@@ -8,6 +8,8 @@ namespace Domain.Entities
 	{
 		Pending,
 		Fullfilled,
+		Completed,
+		Expired,
 		Canceled
 	}
 	public class Reservation : IHasId
@@ -19,5 +21,6 @@ namespace Domain.Entities
 		public Member Member { get; set; } = null!;
 		public DateTime ReservedAt { get; set; }
 		public ReservationStatus Status { get; set; } = ReservationStatus.Pending;
+		public DateTime? HeldUntil { get; set; }
 	}
 }
