@@ -28,6 +28,9 @@ namespace Services
 			services.AddScoped<IReservationService, ReservationService>();
 			services.AddScoped<IReservationExpirationService, ReservationExpirationService>();
 			services.AddHostedService<ReservationExpirationBackgroundService>();
+			services.AddScoped<INotificationService, NotificationService>();
+			services.AddScoped<ICategoryService, CategoryService>();
+			services.AddScoped<IPublisherService, PublisherService>();
 			//appservices
 			services.AddScoped<IAuthorAppService, AuthorAppService>();
 			services.AddScoped<IMemberAppService, MemberAppService>();
