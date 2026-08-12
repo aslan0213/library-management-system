@@ -9,9 +9,9 @@ namespace Shared.Dtos.Book
 		public string Title { get; set; } = string.Empty;
 		public string Isbn { get; set; } = string.Empty;
 		public int PublishedYear { get; set; }
-		public string Publisher { get; set; } = string.Empty;
 		public int TotalCopies { get; set; }
 		public Guid AuthorId { get; set; }
-
+		public Guid PublisherId { get; set; }
+		public List<Guid> CategoryIds { get; set; } = new();
 	}
 }
