@@ -45,11 +45,11 @@ namespace Services
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
 
-		public async Task<Book?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)=>
+		public async Task<Book?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
 			await _unitOfWork.Books.GetByIdAsync(id, cancellationToken);
 
 
-		public async Task<PagedResult<Book>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)=>
+		public async Task<PagedResult<Book>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default) =>
 			await _unitOfWork.Books.GetPagedAsync(query, cancellationToken);
 
 
@@ -88,8 +88,20 @@ namespace Services
 			_unitOfWork.Books.Update(existing);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
-		public async Task<bool> AuthorExistsAsync(Guid authorId, CancellationToken cancellationToken = default)=>
+		public async Task<bool> AuthorExistsAsync(Guid authorId, CancellationToken cancellationToken = default) =>
 			await _unitOfWork.Authors.GetByIdAsync(authorId, cancellationToken) is not null;
 
+		private async Task<List<Category>> ResolveCategoriesAsync(List<Guid> categoryIds, CancellationToken cancellationToken)
+		{
+			var categories = new List<Category>();
+			foreach (var categoryId in categoryIds)
+			{
+				var category = await _unitOfWork.Categories.GetByIdAsync(categoryId, cancellationToken)
+					?? throw NotFoundException.ForEntity(nameof(Category), categoryId);
+				categories.Add(category);
+			}
+			return categories;
+
+		}
 	}
 }
