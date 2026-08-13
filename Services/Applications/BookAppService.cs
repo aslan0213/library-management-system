@@ -48,7 +48,7 @@ namespace Services.Applications
 			await _createValidator.ValidateAndThrowAsync(request, cancellationToken);
 
 			var book = _mapper.Map<Book>(request);
-			var created = await _bookService.CreateAsync(book, cancellationToken);
+			var created = await _bookService.CreateAsync(book, request.CategoryIds, cancellationToken);
 			return _mapper.Map<BookResponse>(created);
 		}
 
@@ -58,7 +58,7 @@ namespace Services.Applications
 
 			var book = _mapper.Map<Book>(request);
 			book.Id = id;
-			await _bookService.UpdateAsync(book, cancellationToken);
+			await _bookService.UpdateAsync(book, request.CategoryIds, cancellationToken);
 		}
 
 		public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default) =>

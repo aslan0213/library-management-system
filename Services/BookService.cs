@@ -15,12 +15,19 @@ namespace Services
 		{
 			_unitOfWork = unitOfWork;
 		}
-		public async Task<Book> CreateAsync(Book book, CancellationToken cancellationToken = default)
+		public async Task<Book> CreateAsync(Book book, List<Guid> categoryIds, CancellationToken cancellationToken = default)
 		{
 			var author = await _unitOfWork.Authors.GetByIdAsync(book.AuthorId, cancellationToken)
 				?? throw NotFoundException.ForEntity(nameof(Author), book.AuthorId);
+			var publisher = await _unitOfWork.Publishers.GetByIdAsync(book.PublisherId, cancellationToken)
+				?? throw NotFoundException.ForEntity(nameof(Publisher), book.PublisherId);
+			var categories = await ResolveCategoriesAsync(categoryIds, cancellationToken);
 			book.Id = Guid.NewGuid();
 			book.AvailableCopies = book.TotalCopies;
+			foreach (var category in categories)
+			{
+				book.Categories.Add(category);
+			}
 			await _unitOfWork.Books.AddAsync(book, cancellationToken);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 			return book;
@@ -47,7 +54,7 @@ namespace Services
 
 
 
-		public async Task UpdateAsync(Book book, CancellationToken cancellationToken = default)
+		public async Task UpdateAsync(Book book, List<Guid> categoryIds, CancellationToken cancellationToken = default)
 		{
 			var existing = await _unitOfWork.Books.GetByIdAsync(book.Id, cancellationToken)
 				?? throw NotFoundException.ForEntity(nameof(Book), book.Id);
@@ -55,19 +62,29 @@ namespace Services
 			{
 				throw NotFoundException.ForEntity(nameof(Author), book.AuthorId);
 			}
+			if (await _unitOfWork.Publishers.GetByIdAsync(book.PublisherId, cancellationToken) is null)
+			{
+				throw NotFoundException.ForEntity(nameof(Publisher), book.PublisherId);
+			}
 			var copiesOnLoan = existing.TotalCopies - existing.AvailableCopies;
 			if (book.TotalCopies < copiesOnLoan)
 			{
 				throw new BusinessRuleViolationException(
 					$"Cannot set TotalCopies to {book.TotalCopies}; {copiesOnLoan} copies are currently on loan.");
 			}
+			var categories = await ResolveCategoriesAsync(categoryIds, cancellationToken);
 			existing.Title = book.Title;
 			existing.Isbn = book.Isbn;
 			existing.PublishedYear = book.PublishedYear;
-			existing.Publisher = book.Publisher;
 			existing.TotalCopies = book.TotalCopies;
 			existing.AvailableCopies = existing.AvailableCopies + (book.TotalCopies - existing.TotalCopies);
 			existing.AuthorId = book.AuthorId;
+			existing.PublisherId = book.PublisherId;
+			existing.Categories.Clear();
+			foreach (var category in categories)
+			{
+				existing.Categories.Add(category);
+			}
 			_unitOfWork.Books.Update(existing);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}

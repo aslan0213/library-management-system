@@ -11,8 +11,10 @@ namespace Services.Mapping
 		public BookProfile()
 		{
 			CreateMap<Book, BookResponse>();
-			CreateMap<CreateBookRequest, Book>();
-			CreateMap<UpdateBookRequest, Book>();
+			CreateMap<CreateBookRequest, Book>()
+				.ForMember(dest => dest.Categories, opt => opt.Ignore());
+			CreateMap<UpdateBookRequest, Book>()
+				.ForMember(dest => dest.Categories, opt => opt.Ignore());
 		}
 	}
 }
