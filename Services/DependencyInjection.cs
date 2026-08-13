@@ -36,6 +36,10 @@ namespace Services
 			services.AddScoped<IMemberAppService, MemberAppService>();
 			services.AddScoped<IBookAppService, BookAppService>();
 			services.AddScoped<ILoanAppService, LoanAppService>();
+			services.AddScoped<IReservationAppService, ReservationAppService>();
+			services.AddScoped<INotificationAppService, NotificationAppService>();	
+			services.AddScoped<ICategoryAppService, CategoryAppService>();
+			services.AddScoped<IPublisherAppService, PublisherAppService>();
 			//Authentication
 			services.AddScoped<IAuthService, AuthService>();
 			services.AddScoped<IJwtTokenGenerator, JwtGenerator>();
