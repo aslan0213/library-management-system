@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Abstractions.Paging;
 using Abstractions.Repositories;
 using Abstractions.Services;
 using Domain.Entities;
@@ -19,6 +20,10 @@ namespace Services.Reservations
 		public async Task<Reservation?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
 			await _unitOfWork.Reservations.GetByIdAsync(id, cancellationToken);
 
+		public async Task<PagedResult<Reservation>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
+		{
+			return await _unitOfWork.Reservations.GetPagedAsync(query, cancellationToken);
+		}
 
 		public async Task<Reservation> CreateReservationAsync(Guid bookId, Guid memberId, CancellationToken cancellationToken = default)
 		{
