@@ -6,6 +6,7 @@ using Abstractions.Repositories;
 using Abstractions.Services;
 using Domain.Entities;
 using Domain.Exceptions;
+using Services.Specifications;
 namespace Services
 {
 	public class BookService : IBookService
@@ -102,6 +103,12 @@ namespace Services
 			}
 			return categories;
 
+		}
+
+		public async Task<PagedResult<Book>> SearchAsync(string? title, Guid? authorId, Guid? publisherId, Guid? categoryId, int? minYear, int? maxYear, bool? onlyAvailable, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+		{
+			var specification = new BookSearchSpecification(title, authorId, publisherId, categoryId, minYear, maxYear, onlyAvailable);
+			return await _unitOfWork.Books.SearchAsync(specification, pageNumber, pageSize, cancellationToken);
 		}
 	}
 }

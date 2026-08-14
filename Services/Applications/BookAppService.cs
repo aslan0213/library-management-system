@@ -63,5 +63,11 @@ namespace Services.Applications
 
 		public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default) =>
 			await _bookService.DeleteAsync(id, cancellationToken);
+
+		public async Task<Shared.Paging.PagedResult<BookResponse>> SearchAsync(BookSearchRequest request, CancellationToken cancellationToken = default)
+		{
+			var result = await _bookService.SearchAsync(request.Title, request.AuthorId, request.PublisherId, request.CategoryId, request.MinYear, request.MaxYear, request.OnlyAvailable, request.PageNumber, request.PageSize, cancellationToken);
+			return _mapper.Map<Shared.Paging.PagedResult<BookResponse>>(result);
+		}
 	}
 }

@@ -7,13 +7,13 @@ namespace Abstractions.Specifications
 {
 	public abstract class SpecificationBase<T> : ISpecification<T>
 	{
-		public Expression<Func<T, bool>>? Criteria { get; private set; }
+		public Expression<Func<T, bool>>? Criteria { get; protected set; }
 
 		public List<Expression<Func<T, object>>> Includes { get; } = new();
 
-		public Expression<Func<T, bool>>? OrderBy { get; private set; }
+		public Expression<Func<T, object>>? OrderBy { get; protected set; }
 
-		public Expression<Func<T, bool>>? OrderByDescending { get; private set; }	
+		public Expression<Func<T, object>>? OrderByDescending { get; protected set; }	
 
 		//protected void AddCriteria(Expression<Func<T, bool>> criteria)
 		//{
@@ -24,11 +24,11 @@ namespace Abstractions.Specifications
 		{
 			Includes.Add(includeExpression);
 		}
-		private void AddOrderBy(Expression<Func<T, bool>> orderByExpression)
+		protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
 		{
 			OrderBy = orderByExpression;
 		}
-		private void AddOrderByDescending(Expression<Func<T, bool>> orderByDescendingExpression)
+		protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
 		{
 			OrderByDescending = orderByDescendingExpression;
 		}
