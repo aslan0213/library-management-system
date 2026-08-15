@@ -6,7 +6,6 @@ using Abstractions.Repositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Repositories;
-using Domain.Entities;
 using Abstractions.Specifications;
 using Persistence.Specifications;
 namespace Persistence.Repositories
