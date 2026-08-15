@@ -12,6 +12,6 @@ namespace Services.Applications
 		Task<PagedResult<PublisherResponse>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default);
 		Task<PublisherResponse> CreateAsync(CreatePublisherRequest request, CancellationToken cancellationToken = default);
 		Task UpdateAsync(Guid Id, UpdatePublisherRequest request, CancellationToken cancellationToken = default);
-		Task DeleteAsync(Guid Id, CancellationToken cancellationToken = default);)
+		Task DeleteAsync(Guid Id, CancellationToken cancellationToken = default);
 	}
 }
