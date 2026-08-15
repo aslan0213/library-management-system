@@ -47,6 +47,8 @@ namespace Services
 				Id = Guid.NewGuid(),
 				BookId = bookId,
 				MemberId = memberId,
+				Book = book,
+				Member = member,
 				BorrowedAt = DateTime.UtcNow,
 				DueAt = dueAt,
 				ReturnedAt = null
