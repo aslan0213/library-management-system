@@ -37,6 +37,14 @@ namespace Services.Reservations
 				throw new BusinessRuleViolationException($"'{book.Title}' has available copies — borrow it directly instead of reserving.");
 			}
 
+			//check for existing active reservation 
+			var existingActive  = await _unitOfWork.Reservations.GetActiveForMemberAndBookAsync(memberId, bookId, cancellationToken);
+			if(existingActive is not null)
+			{
+				throw new BusinessRuleViolationException($"You already have an active reservation for '{book.Title}'.");
+			}
+			//.
+
 			await _unitOfWork.BeginTransactionAsync(cancellationToken);
 			try
 			{

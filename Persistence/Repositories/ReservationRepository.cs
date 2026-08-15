@@ -41,5 +41,15 @@ namespace Persistence.Repositories
 				.OrderBy(r => r.ReservedAt)
 				.FirstOrDefaultAsync(cancellationToken);
 		}
+
+		public async Task<Reservation?> GetActiveForMemberAndBookAsync(Guid memberId, Guid bookId, CancellationToken cancellationToken = default)
+		{
+			return await FindAll(trackChanges: false)
+				.FirstOrDefaultAsync(r =>
+				r.MemberId == memberId &&
+				r.BookId == bookId &&
+				(r.Status == ReservationStatus.Pending || r.Status == ReservationStatus.Fullfilled),
+				cancellationToken);
+		}
 	}
 }
