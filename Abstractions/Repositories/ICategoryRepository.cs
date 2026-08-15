@@ -6,5 +6,6 @@ namespace Abstractions.Repositories
 {
 	public interface ICategoryRepository : IRepositoryBase<Category>
 	{
+		Task<List<Category>> GetByIdsTrackedAsync(List<Guid> ids, CancellationToken cancellationToken = default);
 	}
 }

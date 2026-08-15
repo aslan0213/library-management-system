@@ -94,13 +94,17 @@ namespace Services
 
 		private async Task<List<Category>> ResolveCategoriesAsync(List<Guid> categoryIds, CancellationToken cancellationToken)
 		{
-			var categories = new List<Category>();
-			foreach (var categoryId in categoryIds)
+			if (categoryIds.Count == 0)
 			{
-				var category = await _unitOfWork.Categories.GetByIdAsync(categoryId, cancellationToken)
-					?? throw NotFoundException.ForEntity(nameof(Category), categoryId);
-				categories.Add(category);
+				return new List<Category>();
 			}
+			var categories = await _unitOfWork.Categories.GetByIdsTrackedAsync(categoryIds, cancellationToken);
+			var missingIds = categoryIds.Except(categories.Select(c => c.Id)).ToList();
+			if (missingIds.Count > 0)
+			{
+				throw NotFoundException.ForEntity(nameof(Category), missingIds.First());
+			}
+
 			return categories;
 
 		}
