@@ -14,7 +14,11 @@ namespace Persistence.Repositories
 
 		protected override IQueryable<Reservation> IncludeRelated(IQueryable<Reservation> source)
 		{
-			return source.Include(r => r.Book).Include(r => r.Member);
+			return source
+				.Include(r => r.Book).ThenInclude(b => b.Author)
+				.Include(r => r.Book).ThenInclude(b => b.Publisher)
+				.Include(r => r.Book).ThenInclude(b => b.Categories)
+				.Include(r => r.Member);
 		}
 
 		public async Task<List<Reservation>> GetExpiredFulfilledAsync(DateTime asOf, CancellationToken cancellationToken = default)
