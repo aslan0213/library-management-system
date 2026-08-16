@@ -16,16 +16,16 @@ namespace Services.Validation
 			RuleFor(x => x.Isbn)
 				.NotEmpty()
 				.Length(10, 13);
-			RuleFor(x=>x.Publisher)
-				.NotEmpty()
-				.MaximumLength(150);
+			RuleFor(x => x.PublisherId)
+				.NotEmpty();
 			RuleFor(x => x.PublishedYear)
 				.InclusiveBetween(1450, DateTime.Now.Year);
 			RuleFor(x => x.TotalCopies)
 				.GreaterThanOrEqualTo(0);
 			RuleFor(x => x.AuthorId)
 				.NotEmpty();
-			
+			RuleForEach(x => x.CategoryIds)
+				.NotEmpty();
 		}
 	}
 }

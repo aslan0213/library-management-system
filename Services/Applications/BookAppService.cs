@@ -48,7 +48,7 @@ namespace Services.Applications
 			await _createValidator.ValidateAndThrowAsync(request, cancellationToken);
 
 			var book = _mapper.Map<Book>(request);
-			var created = await _bookService.CreateAsync(book, cancellationToken);
+			var created = await _bookService.CreateAsync(book, request.CategoryIds, cancellationToken);
 			return _mapper.Map<BookResponse>(created);
 		}
 
@@ -58,10 +58,16 @@ namespace Services.Applications
 
 			var book = _mapper.Map<Book>(request);
 			book.Id = id;
-			await _bookService.UpdateAsync(book, cancellationToken);
+			await _bookService.UpdateAsync(book, request.CategoryIds, cancellationToken);
 		}
 
 		public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default) =>
 			await _bookService.DeleteAsync(id, cancellationToken);
+
+		public async Task<Shared.Paging.PagedResult<BookResponse>> SearchAsync(BookSearchRequest request, CancellationToken cancellationToken = default)
+		{
+			var result = await _bookService.SearchAsync(request.Title, request.AuthorId, request.PublisherId, request.CategoryId, request.MinYear, request.MaxYear, request.OnlyAvailable, request.PageNumber, request.PageSize, cancellationToken);
+			return _mapper.Map<Shared.Paging.PagedResult<BookResponse>>(result);
+		}
 	}
 }

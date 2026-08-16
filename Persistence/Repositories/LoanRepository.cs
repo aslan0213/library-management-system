@@ -16,7 +16,11 @@ namespace Persistence.Repositories
 		}
 		protected override IQueryable<Loan> IncludeRelated(IQueryable<Loan> source)
 		{
-			return source.Include(l => l.Book).ThenInclude(b => b.Author).Include(l => l.Member);
+			return source
+				.Include(l => l.Book).ThenInclude(b => b.Author)
+				.Include(l => l.Book).ThenInclude(b => b.Publisher)
+				.Include(l => l.Book).ThenInclude(b => b.Categories)
+				.Include(l => l.Member);
 		}
 		protected override IQueryable<Loan> ApplySort(IQueryable<Loan> source, PagedQuery query)
 		{

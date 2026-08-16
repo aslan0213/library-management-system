@@ -11,8 +11,8 @@ namespace Shared.Dtos.Loan
 		public Guid Id { get; set; }
 		public BookResponse Book { get; set; } = null!;
 		public MemberResponse Member { get; set; } = null!;
-		public DateTime BorrowedDate { get; set; }
+		public DateTime BorrowedAt { get; set; }
 		public DateTime DueAt { get; set; }
-		public DateTime? ReturnedDate { get; set; }
+		public DateTime? ReturnedAt { get; set; }
 	}
 }

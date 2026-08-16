@@ -12,6 +12,9 @@ namespace Domain.Entities
 		public string Email { get; set; } = string.Empty;
 		public string? PhoneNumber { get; set; }
 		public DateTime MembershipDate { get; set; }
+
+		public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+		public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 		public ICollection<Loan> Loans { get; set; } = new List<Loan>();
 	}
 }

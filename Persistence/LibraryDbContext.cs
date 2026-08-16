@@ -17,6 +17,10 @@ namespace Persistence
 		public DbSet<Loan> Loans => Set<Loan>();
 		public DbSet<User> Users => Set<User>();
 		public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+		public DbSet<Publisher> Publishers => Set<Publisher>();
+		public DbSet<Category> Categories => Set<Category>();
+		public DbSet<Reservation> Reservations => Set<Reservation>();
+		public DbSet<Notification> Notifications => Set<Notification>();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

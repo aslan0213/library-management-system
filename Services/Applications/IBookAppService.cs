@@ -13,5 +13,6 @@ namespace Services.Applications
 		Task<BookResponse> CreateAsync(CreateBookRequest request, CancellationToken cancellationToken = default);
 		Task UpdateAsync(Guid id, UpdateBookRequest request, CancellationToken cancellationToken = default);
 		Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+		Task<PagedResult<BookResponse>> SearchAsync(BookSearchRequest request, CancellationToken cancellationToken = default);
 	}
 }

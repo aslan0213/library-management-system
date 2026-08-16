@@ -101,5 +101,16 @@ namespace LibraryManagement.Api.Controllers
 			await _bookAppService.DeleteAsync(id, cancellationToken);
 			return NoContent();
 		}
+
+		/// <summary>
+		/// Searches books with dynamic filters (title, author, publisher, category, year range, availability).
+		/// </summary>
+		[HttpGet("search")]
+		[ProducesResponseType(typeof(PagedResult<BookResponse>), StatusCodes.Status200OK)]
+		public async Task<ActionResult<PagedResult<BookResponse>>> Search([FromQuery] BookSearchRequest request, CancellationToken cancellationToken)
+		{
+			var result = await _bookAppService.SearchAsync(request, cancellationToken);
+			return Ok(result);
+		}
 	}
 }
