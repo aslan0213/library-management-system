@@ -53,8 +53,6 @@ namespace Services.Reservations
 					Id = Guid.NewGuid(),
 					BookId = book.Id,
 					MemberId = member.Id,
-					Book = book,
-					Member = member,
 					ReservedAt = DateTime.UtcNow,
 					Status = ReservationStatus.Pending
 				};
@@ -73,7 +71,7 @@ namespace Services.Reservations
 				await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 				await _unitOfWork.CommitTransactionAsync(cancellationToken);
-				return reservation;
+				return await _unitOfWork.Reservations.GetByIdAsync(reservation.Id, cancellationToken) ?? reservation;
 			}
 			catch
 			{

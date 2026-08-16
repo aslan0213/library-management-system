@@ -47,15 +47,13 @@ namespace Services
 				Id = Guid.NewGuid(),
 				BookId = bookId,
 				MemberId = memberId,
-				Book = book,
-				Member = member,
 				BorrowedAt = DateTime.UtcNow,
 				DueAt = dueAt,
 				ReturnedAt = null
 			};
 			await _unitOfWork.Loans.AddAsync(loan, cancellationToken);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
-			return loan;
+			return await _unitOfWork.Loans.GetByIdAsync(loan.Id, cancellationToken) ?? loan;
 		}
 
 		public async Task<Loan?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)=>
