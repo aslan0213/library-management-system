@@ -14,17 +14,21 @@ namespace Services.Applications
 	public class BookAppService : IBookAppService
 	{
 		private readonly IBookService _bookService;
+		private readonly ICacheService _cacheService;
 		private readonly IMapper _mapper;
 		private readonly IValidator<CreateBookRequest> _createValidator;
 		private readonly IValidator<UpdateBookRequest> _updateValidator;
 
+		private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10);
 		public BookAppService(
 			IBookService bookService,
+			ICacheService cacheService,
 			IMapper mapper,
 			IValidator<CreateBookRequest> createValidator,
 			IValidator<UpdateBookRequest> updateValidator)
 		{
 			_bookService = bookService;
+			_cacheService = cacheService;
 			_mapper = mapper;
 			_createValidator = createValidator;
 			_updateValidator = updateValidator;
@@ -32,8 +36,20 @@ namespace Services.Applications
 
 		public async Task<BookResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
 		{
+			var cacheKey = BuildCacheKey(id);
+			var cached = await _cacheService.GetAsync<BookResponse>(cacheKey, cancellationToken);
+			if (cached is not null)
+			{
+				return cached;
+			}
 			var book = await _bookService.GetByIdAsync(id, cancellationToken);
-			return book is null ? null : _mapper.Map<BookResponse>(book);
+			if (book is null)
+			{
+				return null;
+			}
+			var response = _mapper.Map<BookResponse>(book);
+			await _cacheService.SetAsync(cacheKey, response, CacheDuration, cancellationToken);
+			return response;
 		}
 
 		public async Task<Shared.Paging.PagedResult<BookResponse>> GetPagedAsync(PagedRequest request, CancellationToken cancellationToken = default)
@@ -59,15 +75,20 @@ namespace Services.Applications
 			var book = _mapper.Map<Book>(request);
 			book.Id = id;
 			await _bookService.UpdateAsync(book, request.CategoryIds, cancellationToken);
+			await _cacheService.RemoveAsync(BuildCacheKey(id), cancellationToken);
 		}
 
-		public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default) =>
+		public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+		{
 			await _bookService.DeleteAsync(id, cancellationToken);
+			await _cacheService.RemoveAsync(BuildCacheKey(id), cancellationToken);
 
+		}
 		public async Task<Shared.Paging.PagedResult<BookResponse>> SearchAsync(BookSearchRequest request, CancellationToken cancellationToken = default)
 		{
 			var result = await _bookService.SearchAsync(request.Title, request.AuthorId, request.PublisherId, request.CategoryId, request.MinYear, request.MaxYear, request.OnlyAvailable, request.PageNumber, request.PageSize, cancellationToken);
 			return _mapper.Map<Shared.Paging.PagedResult<BookResponse>>(result);
 		}
+		private static string BuildCacheKey(Guid id) => $"book:{id}";
 	}
 }
