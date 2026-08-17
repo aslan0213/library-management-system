@@ -15,6 +15,7 @@ namespace Shared.Dtos.Book
 		public int PublishedYear { get; set; }
 		public int TotalCopies { get; set; }
 		public int AvailableCopies { get; set; }
+		public string? CoverImagePath { get; set; }
 		public AuthorResponse Author { get; set; } = null!;
 		public PublisherResponse Publisher { get; set; } = null!;
 		public List<CategoryResponse> Categories { get; set; } = new();

@@ -14,5 +14,6 @@ namespace Abstractions.Services
 		Task UpdateAsync(Book book, List<Guid> categoryIds, CancellationToken cancellationToken = default);
 		Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 		Task<PagedResult<Book>> SearchAsync(string? title, Guid? authorId, Guid? publisherId, Guid? categoryId, int? minYear, int? maxYear, bool? onlyAvailable, int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+		Task UpdateCoverPathAsync(Guid id, string? coverImagePath, CancellationToken cancellationToken = default);
 	}
 }

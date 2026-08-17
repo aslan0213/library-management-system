@@ -114,5 +114,14 @@ namespace Services
 			var specification = new BookSearchSpecification(title, authorId, publisherId, categoryId, minYear, maxYear, onlyAvailable);
 			return await _unitOfWork.Books.SearchAsync(specification, pageNumber, pageSize, cancellationToken);
 		}
+
+		public async Task UpdateCoverPathAsync(Guid id, string? coverImagePath, CancellationToken cancellationToken = default)
+		{
+			var existing = await _unitOfWork.Books.GetByIdAsync(id, cancellationToken)
+				?? throw NotFoundException.ForEntity(nameof(Book), id);
+			existing.CoverImagePath = coverImagePath;
+			_unitOfWork.Books.Update(existing);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+		}
 	}
 }

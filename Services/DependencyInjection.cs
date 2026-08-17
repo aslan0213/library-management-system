@@ -2,14 +2,16 @@
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Services.Applications;
 using Services.Auth;
 using Services.BackgroundJobs;
+using Services.FileService;
 using Services.Reservations;
+using Shared.Settings;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Extensions.Hosting;
 namespace Services
 {
 	public static class DependencyInjection
@@ -45,6 +47,11 @@ namespace Services
 			services.AddScoped<IJwtTokenGenerator, JwtGenerator>();
 			services.AddScoped<IPasswordHasher, PasswordHasher>();
 			services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+			// File storage
+			var fileStorageSettings = new FileStorageSettings();
+			configuration.GetSection(FileStorageSettings.SectionName).Bind(fileStorageSettings);
+			services.Configure<FileStorageSettings>(configuration.GetSection(FileStorageSettings.SectionName));
+			services.AddSingleton<IFileService>(new LocalFileService(fileStorageSettings.BasePath));
 			return services;
 		}	
 	}
