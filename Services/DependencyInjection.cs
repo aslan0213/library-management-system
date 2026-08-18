@@ -30,6 +30,7 @@ namespace Services
 			services.AddScoped<IReservationService, ReservationService>();
 			services.AddScoped<IReservationExpirationService, ReservationExpirationService>();
 			services.AddHostedService<ReservationExpirationBackgroundService>();
+			services.AddHostedService<RefreshTokenCleanupBackgroundService>();
 			services.AddScoped<INotificationService, NotificationService>();
 			services.AddScoped<ICategoryService, CategoryService>();
 			services.AddScoped<IPublisherService, PublisherService>();
