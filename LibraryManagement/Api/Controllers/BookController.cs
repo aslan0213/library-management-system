@@ -160,20 +160,24 @@ namespace LibraryManagement.Api.Controllers
 			if (!_fileStorageSettings.AllowedExtensions.Contains(extension))
 				return StatusCode(StatusCodes.Status415UnsupportedMediaType,
 					$"File type '{extension}' is not supported. Allowed types: {string.Join(", ", _fileStorageSettings.AllowedExtensions)}");
-			
-			await using var stream = file.OpenReadStream();
-			if (!await IsValidImageAsync(stream, extension))
-				return StatusCode(StatusCodes.Status415UnsupportedMediaType,
-					"File content does not match the expected image format. The file may be corrupted or have an incorrect extension.");
-			
-			stream.Position = 0;
+
+			await using (var validationStream = file.OpenReadStream())
+			{
+				if (!await IsValidImageAsync(validationStream, extension))
+					return StatusCode(StatusCodes.Status415UnsupportedMediaType,
+						"File content does not match the expected image format. The file may be corrupted or have an incorrect extension.");
+			}
 			
 			if (!string.IsNullOrEmpty(book.CoverImagePath))
 				await _fileService.DeleteFileAsync(book.CoverImagePath, cancellationToken);
 			
 			var fileName = $"{id}{extension}";
-			var savedPath = await _fileService.SaveFileAsync(stream, fileName, "covers", cancellationToken);
-			
+			string savedPath;
+			await using (var saveStream = file.OpenReadStream())
+			{
+				savedPath = await _fileService.SaveFileAsync(saveStream, fileName, "covers", cancellationToken);
+			}
+
 			await _bookService.UpdateCoverPathAsync(id, savedPath, cancellationToken);
 			return NoContent();
 		}

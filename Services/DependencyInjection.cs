@@ -48,10 +48,8 @@ namespace Services
 			services.AddScoped<IPasswordHasher, PasswordHasher>();
 			services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 			// File storage
-			var fileStorageSettings = new FileStorageSettings();
-			configuration.GetSection(FileStorageSettings.SectionName).Bind(fileStorageSettings);
 			services.Configure<FileStorageSettings>(configuration.GetSection(FileStorageSettings.SectionName));
-			services.AddSingleton<IFileService>(new LocalFileService(fileStorageSettings.BasePath));
+			services.AddSingleton<IFileService,LocalFileService>();
 			return services;
 		}	
 	}

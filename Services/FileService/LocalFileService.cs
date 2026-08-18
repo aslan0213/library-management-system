@@ -1,4 +1,7 @@
 ﻿using Abstractions.Services;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Shared.Settings;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,11 +18,12 @@ namespace Services.FileService
 				[".jpeg"] = "image/jpeg",
 				[".png"] = "image/png"
 			};
-		public LocalFileService(string basePath)
+		public LocalFileService(IOptions<FileStorageSettings> settings, IHostEnvironment environment)
 		{
-			_basePath = basePath;
-			Directory.CreateDirectory(_basePath);
+			var configuredPath = settings.Value.BasePath;
+			_basePath = Path.IsPathRooted(configuredPath) ? configuredPath : Path.GetFullPath(Path.Combine(environment.ContentRootPath, configuredPath));
 
+			Directory.CreateDirectory(_basePath);
 		}
 		public Task DeleteFileAsync(string filePath, CancellationToken cancellationToken = default)
 		{
