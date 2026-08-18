@@ -51,7 +51,7 @@ namespace Services.FileService
 			var folderPath = Path.Combine(_basePath, subfolder);
 			Directory.CreateDirectory(folderPath);
 			var filePath = Path.Combine(folderPath, fileName);
-			await using var outputStream = new FileStream(fileName, FileMode.Create);
+			await using var outputStream = new FileStream(filePath, FileMode.Create);
 			await fileStream.CopyToAsync(outputStream, cancellationToken);
 			return Path.Combine(subfolder, fileName);
 		}
