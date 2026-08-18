@@ -7,11 +7,13 @@ using Services.Applications;
 using Services.Auth;
 using Services.BackgroundJobs;
 using Services.FileService;
+using Services.Notifications;
 using Services.Reservations;
 using Shared.Settings;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Channels;
 namespace Services
 {
 	public static class DependencyInjection
@@ -51,6 +53,15 @@ namespace Services
 			// File storage
 			services.Configure<FileStorageSettings>(configuration.GetSection(FileStorageSettings.SectionName));
 			services.AddSingleton<IFileService,LocalFileService>();
+			// Async notification dispatcher
+			var notificationChannel = Channel.CreateUnbounded<Guid>(new UnboundedChannelOptions
+			{
+				SingleReader = true,
+				SingleWriter = false
+			});
+			services.AddSingleton(notificationChannel);
+			services.AddScoped<INotificationDispatcher, NotificationDispatcher>();
+			services.AddHostedService<NotificationDispatchBackgroundService>();
 			return services;
 		}	
 	}
