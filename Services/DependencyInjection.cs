@@ -2,14 +2,18 @@
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Services.Applications;
 using Services.Auth;
 using Services.BackgroundJobs;
+using Services.FileService;
+using Services.Notifications;
 using Services.Reservations;
+using Shared.Settings;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Extensions.Hosting;
+using System.Threading.Channels;
 namespace Services
 {
 	public static class DependencyInjection
@@ -28,6 +32,7 @@ namespace Services
 			services.AddScoped<IReservationService, ReservationService>();
 			services.AddScoped<IReservationExpirationService, ReservationExpirationService>();
 			services.AddHostedService<ReservationExpirationBackgroundService>();
+			services.AddHostedService<RefreshTokenCleanupBackgroundService>();
 			services.AddScoped<INotificationService, NotificationService>();
 			services.AddScoped<ICategoryService, CategoryService>();
 			services.AddScoped<IPublisherService, PublisherService>();
@@ -45,6 +50,18 @@ namespace Services
 			services.AddScoped<IJwtTokenGenerator, JwtGenerator>();
 			services.AddScoped<IPasswordHasher, PasswordHasher>();
 			services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+			// File storage
+			services.Configure<FileStorageSettings>(configuration.GetSection(FileStorageSettings.SectionName));
+			services.AddSingleton<IFileService,LocalFileService>();
+			// Async notification dispatcher
+			var notificationChannel = Channel.CreateUnbounded<Guid>(new UnboundedChannelOptions
+			{
+				SingleReader = true,
+				SingleWriter = false
+			});
+			services.AddSingleton(notificationChannel);
+			services.AddScoped<INotificationDispatcher, NotificationDispatcher>();
+			services.AddHostedService<NotificationDispatchBackgroundService>();
 			return services;
 		}	
 	}

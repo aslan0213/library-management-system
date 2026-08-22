@@ -20,6 +20,8 @@ namespace Persistence.Configurations
 				.HasMaxLength(13);
 			builder.HasIndex(b => b.Isbn)
 				.IsUnique();
+			builder.Property(b => b.CoverImagePath)
+				.HasMaxLength(500);
 			builder.HasMany(b => b.Loans)
 				.WithOne(l => l.Book)
 				.HasForeignKey(l => l.BookId)

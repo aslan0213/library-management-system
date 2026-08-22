@@ -11,6 +11,16 @@ services:
       - "5432:5432"
     volumes:
       - library-postgres-data:/var/lib/postgresql/data
+  redis:
+    image: redis:7
+    container_name: library-management-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - library-redis-data:/data
+  
 
 volumes:
   library-postgres-data:
+  library-redis-data:

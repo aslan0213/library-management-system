@@ -6,15 +6,18 @@ using Abstractions.Repositories;
 using Abstractions.Services;
 using Domain.Entities;
 using Domain.Exceptions;
+using Microsoft.IdentityModel.Tokens.Experimental;
 
 namespace Services.Reservations
 {
 	public class ReservationService : IReservationService
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		public ReservationService(IUnitOfWork unitOfWork)
+		private readonly INotificationDispatcher _notificationDispatcher;
+		public ReservationService(IUnitOfWork unitOfWork, INotificationDispatcher notificationDispatcher)
 		{
 			_unitOfWork = unitOfWork;
+			_notificationDispatcher = notificationDispatcher;
 		}
 
 		public async Task<Reservation?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
@@ -71,6 +74,9 @@ namespace Services.Reservations
 				await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 				await _unitOfWork.CommitTransactionAsync(cancellationToken);
+
+				_notificationDispatcher.QueueSend(notification.Id);
+
 				return await _unitOfWork.Reservations.GetByIdAsync(reservation.Id, cancellationToken) ?? reservation;
 			}
 			catch
@@ -108,14 +114,18 @@ namespace Services.Reservations
 				nextPending.HeldUntil = DateTime.UtcNow.AddHours(48); // Hold for 48 hours
 				_unitOfWork.Reservations.Update(nextPending);
 
-				await _unitOfWork.Notifications.AddAsync(new Notification
+				var book = await _unitOfWork.Books.GetByIdAsync(bookId, cancellationToken);
+				var bookTitle = book?.Title ?? "your reserved book";
+				var notification = new Notification
 				{
 					Id = Guid.NewGuid(),
 					MemberId = nextPending.MemberId,
-					Message = $"Your reservation for '{nextPending.Book.Title}' is now available. Please pick it up within 48 hours.",
+					Message = $"Your reservation for '{bookTitle}' is now available. Please pick it up within 48 hours.",
 					SentAt = DateTime.UtcNow,
 					IsRead = false
-				}, cancellationToken);
+				}; 
+				await _unitOfWork.Notifications.AddAsync(notification, cancellationToken);
+				_notificationDispatcher.QueueSend(notification.Id);
 			}
 			else
 			{

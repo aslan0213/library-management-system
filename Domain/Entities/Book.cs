@@ -12,6 +12,7 @@ namespace Domain.Entities
 		public int PublishedYear { get; set; }
 		public int TotalCopies { get; set; }
 		public int AvailableCopies { get; set; }
+		public string? CoverImagePath { get; set; }
 
 		public Guid AuthorId { get; set; }
 		public Author Author { get; set; } = null!;
